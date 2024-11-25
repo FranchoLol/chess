@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capria.chess</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <header>
+        <h1>Capria.chess</h1>
+        <div id="engine-status" class="text-center mt-4 text-lg font-semibold"></div>
+        <div id="status-game-info"></div>
+        <nav>
+            <button id="theme-toggle" aria-label="Cambiar tema"><i class="fas fa-adjust"></i> Tema</button>
+            <button id="lenguage-toggle" aria-label="Cambiar idioma"><i class="fas fa-language"></i> ES</button>
+            <button id="help-toggle" aria-label="Ver guía"><i class="fas fa-question-circle"></i> Guía</button>
+        </nav>
+    </header>
+    <main>
+        <section class="left-panel">
+            <h2><i class="fas fa-chess"></i> JUGADAS</h2>
+            <p id="move-count">Movidas totales: -</p>
+            <div id="move-history"></div>
+        </section>
+
+        <!--tablero-->
+        <section class="board-panel">
+            <div class="black-player">
+                <p id="player-top">Jugador superior</p>
+                <p id="player-top-timer">--:-- <i class="fas fa-hourglass-half"></i></p>
+            </div>
+            <div class="chessboard-container">
+                <div class="indicator-column">
+                    <div class="indicatorNum">8</div>
+                    <div class="indicatorNum">7</div>
+                    <div class="indicatorNum">6</div>
+                    <div class="indicatorNum">5</div>
+                    <div class="indicatorNum">4</div>
+                    <div class="indicatorNum">3</div>
+                    <div class="indicatorNum">2</div>
+                    <div class="indicatorNum">1</div>
+                </div>
+                <div class="board-with-indicators">
+                    <div class="chessboard"></div>
+
+                    <div class="indicator-row">
+                        <div class="indicator">a</div>
+                        <div class="indicator">b</div>
+                        <div class="indicator">c</div>
+                        <div class="indicator">d</div>
+                        <div class="indicator">e</div>
+                        <div class="indicator">f</div>
+                        <div class="indicator">g</div>
+                        <div class="indicator">h</div>
+                    </div> 
+                </div>
+            </div>
+            <div class="light-player">
+                <p id="player-bottom">Jugador inferior</p>
+                <p id="player-bottom-timer">--:-- <i class="fas fa-hourglass-half"></i></p>
+            </div>
+        </section>
+        
+        <section class="right-panel">
+            <h2><i class="fas fa-cogs"></i> Configuración</h2>
+        
+            <div class="settings">
+                <!-- Sección de Mostrar Movimientos -->
+                <div class="setting-group">
+                    <h3>Mostrar Movimientos</h3>
+                    <div class="setting-options">
+                        <label class="chess-toggle inverter">
+                            <input type="checkbox" id="show-moves-white" checked>
+                            <span class="chess-piece white-king"></span>
+                            <span class="label-text">Blancas</span>
+                        </label>
+                        <label class="chess-toggle">
+                            <input type="checkbox" id="show-moves-black" checked>
+                            <span class="chess-piece black-king"></span>
+                            <span class="label-text">Negras</span>
+                        </label>
+                    </div>
+                </div>
+        
+                <!-- Sección de Promoción Automática -->
+                <div class="setting-group">
+                    <h3>Promoción Automática</h3>
+                    <div class="setting-options">
+                        <label class="chess-toggle inverter">
+                            <input type="checkbox" id="auto-queen-white">
+                            <span class="chess-piece white-queen"></span>
+                            <span class="label-text">Blancas</span>
+                        </label>
+                        <label class="chess-toggle">
+                            <input type="checkbox" id="auto-queen-black">
+                            <span class="chess-piece black-queen"></span>
+                            <span class="label-text">Negras</span>
+                        </label>
+                    </div>
+                </div>
+        
+                <!-- Sección de Indicar Jaque -->
+                <div class="setting-group">
+                    <h3>Indicar Jaque</h3>
+                    <div class="setting-options">
+                        <label class="chess-toggle inverter">
+                            <input type="checkbox" id="show-check-white" checked>
+                            <span class="chess-piece white-knight"></span>
+                            <span class="label-text">Blancas</span>
+                        </label>
+                        <label class="chess-toggle">
+                            <input type="checkbox" id="show-check-black" checked>
+                            <span class="chess-piece black-knight"></span>
+                            <span class="label-text">Negras</span>
+                        </label>
+                    </div>
+                    <div id="check-message" class="check-message"></div>
+                </div>
+
+                <!-- Sección de Opciones de Juego -->
+                <div class="setting-group">
+                    <h3>Opciones de Juego</h3>
+                    <button id="radiation-btn" class="chess-button radiation-effect"><i class="fas fa-biohazard"></i> Chess Radiation</button>
+
+                    <div class="setting-options">
+                        <button id="play-friend-btn" class="chess-button"><i class="fas fa-user-friends"></i> ajedrez clasico</button>
+                        <button id="play-vs-ai" class="chess-button"><i class="fas fa-microchip"></i> jugar contra IA</button>
+                    </div>
+                    <div class="setting-options">
+                        <button id="play-three-btn" class="chess-button" disabled><i class="fas fa-users"></i> ajedresVs3</button>
+                        <button id="pawn-race-btn" class="chess-button"><i class="fas fa-flag-checkered"></i> carrera peones</button>
+                    </div>
+                    <div class="setting-options">
+                        <button id="play-4-standard-btn" class="chess-button" disabled><i class="fas fa-th-large"></i> ajedresVs4</button>
+                        <button id="king-of-hill-btn" class="chess-button"><i class="fas fa-crown"></i> rey de colina</button>
+                    </div>
+                    <div class="setting-options">
+                        <button id="play-4-circular-btn" class="chess-button" disabled><i class="fas fa-circle"></i> Vs3 Circular</button>
+                        <button id="three-check-chess-btn" class="chess-button"><i class="fas fa-check-double"></i> 3 jaques normal</button>
+                    </div>
+                    <div class="setting-options">
+                        <button id="play-4-compact-btn" class="chess-button" disabled><i class="fas fa-square"></i> Vs4 Compacto</button>
+                        <button id="horde-chess-btn" class="chess-button" disabled><i class="fas fa-users-cog"></i> ajedrez horde</button>
+                    </div>
+                    <div class="setting-options">
+                        <button id="chess960-btn" class="chess-button"><i class="fas fa-random"></i> ajedrez960</button>
+                        <button id="atomic-chess-btn" class="chess-button"><i class="fas fa-bomb"></i> ajedrez atómico</button>
+                    </div>
+                    <div class="setting-options">
+                        <button id="pawn-vs-pieces" class="chess-button"><i class="fas fa-chess-pawn"></i> peon X pieza</button>
+                        <button id="crazyhouse-chess" class="chess-button" disabled><i class="fas fa-chess-king"></i> Crazyhouse</button>
+                    </div>
+                    
+                    <!-- Sección de Configuración de IA -->
+                    <div class="ai-settings">
+                        <h3>Nivel de IA</h3>
+                        <label for="ai-elo"><i class="fas fa-brain"></i> ELO: <span id="ai-elo-value">100</span></label>
+                        <input type="range" id="ai-elo" min="100" max="2000" step="100" value="100">
+                    </div>
+                    <div class="setting-options">
+                        <button id="reset-game" class="chess-button"><i class="fas fa-arrows-rotate"></i> Reiniciar tablero</button>
+                        <button id="end-game-btn" class="chess-button"><i class="fas fa-stop-circle"></i> Finalizar Partido</button>
+                    </div>
+                    <button id="play-with-timer-btn" class="chess-button" disabled><i class="fas fa-stopwatch"></i> Jugar con reloj</button>
+                </div>
+        
+                <!-- Sección de Historial de Movimientos -->
+                <div class="setting-group">
+                    <h3>Historial de Movimientos</h3>
+                    <div class="setting-options">
+                        <button id="move-back" class="chess-button" disabled><i class="fas fa-backward"></i></button>
+                        <button id="move-forward" class="chess-button" disabled><i class="fas fa-forward"></i></button>
+                        <button id="move-fast-forward" class="chess-button" disabled><i class="fas fa-forward-fast"></i></button>
+                    </div>
+                </div>
+
+                <!-- Sección de guardado y captura -->
+                <div class="setting-group">
+                    <h3>Guardado y Captura</h3>
+                    <div class="setting-options">
+                        <button id="capture-screenshot" class="chess-button"><i class="fas fa-crop-alt"></i> Capturar tablero</button>
+                        <button id="save-history" class="chess-button"><i class="fas fa-save"></i> Guardar historial</button>
+                    </div>
+                </div>
+
+                <!-- Sección de Esquema de Colores -->
+                <div class="setting-group">
+                    <h3>Esquema de Colores</h3>
+                    <h4>tablero & piezas</h4>
+                    <div class="custom-select">
+                        <select id="board-theme-select" class="chess-select">
+                            <option value="default" selected>Predeterminado</option>
+                            <option value="chessCapria">Capria</option>
+                            <option value="chessClassic">Original</option>
+                            <option value="chessClassicTwo">Clásico 1 (Madera)</option>
+                            <option value="chessClassicTree">Clásico 2 (Verde)</option>
+                            <option value="chessClassicFour">Clásico 3 (rojo)</option>
+                            <option value="chessNeon">Neón</option>
+                            <option value="chessCyberpunk">Cyberpunk</option>
+                            <option value="chessOcean">Ocean</option>
+                            <option value="chessSunset">Sunset</option>
+                            <option value="chessForest">Forest</option>
+                            <option value="chessDesert">Desert</option>
+                            <option value="chessSpace">Space</option>
+                            <option value="chessInvisible">Invisible</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+        
+
+    <div id="promotion-modal" class="modal">
+        <div class="modal-content">
+            <h2>Elige una pieza para promocionar</h2>
+            <div class="promotion-options">
+                <div class="piece" data-piece="q">♕</div>
+                <div class="piece" data-piece="r">♖</div>
+                <div class="piece" data-piece="b">♗</div>
+                <div class="piece" data-piece="n">♘</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-over-modal" class="modal">
+        <div class="modal-content">
+            <h2>Fin del juego</h2>
+            <p id="game-result"></p>
+            <button id="new-game">Aceptar</button>
+        </div>
+    </div>
+
+    <div id="ai-mode-modal" class="modal">
+        <div class="modal-content">
+            <h2>Jugar contra IA</h2>
+            <p>Selecciona el color con el que quieres jugar:</p>
+            <input id="player-vs-ai-name" placeholder="Tu nombre" />
+
+            <div class="ai-options">
+                <button id="play-white" class="chess-button">Blancas</button>
+                <button id="play-black" class="chess-button">Negras</button>
+                <button id="play-random" class="chess-button">Aleatorio</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="play-friend-modal" class="modal">
+        <div class="modal-content">
+            <h2>Jugar con un amigo</h2>
+            <input id="playerA" placeholder="Nombre del Jugador A" />
+            <input id="playerB" placeholder="Nombre del Jugador B" />
+            <button id="play-friend-confirm">Aceptar</button>
+            <button id="play-friend-cancel">Cancelar</button>
+        </div>
+    </div>
+    
+    <div id="play-with-timer-modal" class="modal">
+        <div class="modal-content">
+            <h2>Seleccionar tiempo</h2>
+            <select id="timer-select">
+                <option value="60">1 minuto</option>
+                <option value="180">3 minutos</option>
+                <option value="300">5 minutos</option>
+                <option value="600">10 minutos</option>
+                <option value="900">15 minutos</option>
+                <option value="1800">30 minutos</option>
+                <option value="3600">1 hora</option>
+                <option value="7200">2 horas</option>
+                <option value="10800">3 horas</option>
+                <option value="14400">4 horas</option>
+                <option value="18000">5 horas</option>
+                <option value="21600">6 horas</option>
+                <option value="86400">1 día</option>
+                <option value="172800">2 días</option>
+                <option value="259200">3 días</option>
+            </select>
+            <button id="timer-confirm" class="chess-button">Aceptar</button>
+            <button id="timer-cancel" class="chess-button">Cancelar</button>
+        </div>
+    </div>
+
+
+    </main>
+
+<!--
+    <footer>
+        <a href="https://github.com/tuusuario" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-github"></i>
+        </a>
+        <a href="https://instagram.com/tuusuario" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-instagram"></i>
+        </a>  
+    </footer>-->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="script.js"></script>
+
+    <script src="stockfish/stockfish.js"></script>
+    <script src="stockfish/stockfish.wasm"></script>
+    <script src="stockfish/stockfish.worker.js"></script>
+
+</body>
+</html>
