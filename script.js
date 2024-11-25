@@ -1852,7 +1852,7 @@ document.querySelectorAll('.chess-button').forEach(button => {
                     renderBoard();
                 });
                 break;
-            case 'pawn-race-btn':
+            case 'pawn-vs-pieces':
                 showPlayerInputModal(() => {
                     initPawnVsPieces();
                 });
